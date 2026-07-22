@@ -41,11 +41,13 @@ def render_results(df, drug):
     display["signal"] = display["signal"].map({True: "🔴 signal", False: ""})
     display = display[["event", "a", "PRR (95% CI)", "ROR (95% CI)", "chi2", "signal"]]
     display["chi2"] = display["chi2"].round(2)
+    display = display.rename(columns={"event": "Adverse event (MedDRA PT)"})
 
     if HAS_SHADCN:  # nicer table; degrades to st.dataframe if the component failed to import
         ui.table(data=display)
     else:
         st.dataframe(display, use_container_width=True, hide_index=True)
+    st.caption("Reaction names are MedDRA Preferred Terms as reported to FAERS.")
 
     st.subheader("Top 10 by PRR")
     top10 = df.head(10).set_index("event")["PRR"].sort_values()
