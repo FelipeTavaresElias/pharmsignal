@@ -19,6 +19,7 @@ st.info(
 )
 
 
+@st.cache_data(ttl=60 * 60 * 24)  # 24h: rate-limit protection + snappy demos
 def run_search(drug):
     return detect_signals(drug)
 
@@ -54,10 +55,19 @@ def render_results(df, drug):
     st.bar_chart(top10, horizontal=True)
 
 
-drug = st.text_input("Drug name", placeholder="e.g. metformin").strip().lower()
+st.write("Try an example:")
+cols = st.columns(3)
+for col, example in zip(cols, ("metformin", "amiodarone", "atorvastatin")):
+    if col.button(example):
+        st.session_state["drug"] = example
+
+drug = st.text_input(
+    "Drug name", placeholder="e.g. metformin", key="drug"
+).strip().lower()
 if drug:
     try:
-        df = run_search(drug)
+        with st.spinner("Querying openFDA…"):
+            df = run_search(drug)
     except DrugNotFound:
         st.warning(f"No reports found for “{drug}” — check the spelling.")
     except ApiUnavailable:
