@@ -1,4 +1,5 @@
 requests
 python-dotenv
 pandas
+streamlit
 streamlit-shadcn-ui
