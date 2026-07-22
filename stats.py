@@ -11,7 +11,14 @@ _Z = 1.96  # 95% CI
 
 
 def _correct(a, b, c, d):
-    """Haldane-Anscombe: +0.5 to every cell when any cell is zero."""
+    """Haldane-Anscombe: +0.5 to every cell when any cell is zero.
+
+    Live openFDA `count` queries are fetched separately and can be mutually
+    inconsistent, so a derived cell (b, c, or d) can come back slightly
+    negative. Clamp negatives to 0 first so they still trigger the
+    Haldane-Anscombe correction instead of flowing into sqrt() as negative.
+    """
+    a, b, c, d = max(a, 0), max(b, 0), max(c, 0), max(d, 0)
     if min(a, b, c, d) == 0:
         return a + 0.5, b + 0.5, c + 0.5, d + 0.5
     return a, b, c, d

@@ -47,3 +47,14 @@ def test_zero_cell_haldane_anscombe():
     est, lo, hi = prr(0, 1000, 100, 98900)
     assert all(map(math.isfinite, (est, lo, hi)))
     assert math.isfinite(chi2_yates(0, 1000, 100, 98900))
+
+
+def test_negative_cell_does_not_crash():
+    # Inconsistent openFDA counts can yield a negative derived cell; must
+    # not raise (math domain error) and must return finite numbers.
+    table = (10, -2, 100, 98900)
+    est, lo, hi = prr(*table)
+    assert all(map(math.isfinite, (est, lo, hi)))
+    est, lo, hi = ror(*table)
+    assert all(map(math.isfinite, (est, lo, hi)))
+    assert math.isfinite(chi2_yates(*table))
