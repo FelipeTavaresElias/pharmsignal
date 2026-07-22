@@ -1,0 +1,15 @@
+step,formula,value
+a,fixed,20
+b,fixed,980
+c,fixed,100
+d,fixed,98900
+n,a+b+c+d,100000
+PRR,=(a/(a+b))/(c/(c+d)),19.8
+ROR,=(a*d)/(b*c),20.183673469387756
+SE_ln_PRR,=sqrt(1/a - 1/(a+b) + 1/c - 1/(c+d)),0.24398278829351746
+PRR_CI_low,=exp(ln(PRR) - 1.96*SE_ln_PRR),12.300505352739357
+PRR_CI_high,=exp(ln(PRR) + 1.96*SE_ln_PRR),31.87186125752888
+SE_ln_ROR,=sqrt(1/a + 1/b + 1/c + 1/d),0.2467792410790162
+ROR_CI_low,=exp(ln(ROR) - 1.96*SE_ln_ROR),12.436909954025817
+ROR_CI_high,=exp(ln(ROR) + 1.96*SE_ln_ROR),32.75577906608534
+chi2_yates,=n*(abs(a*d-b*c) - n/2)^2 / ((a+b)*(c+d)*(a+c)*(b+d)),282.2326185361828
