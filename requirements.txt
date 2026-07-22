@@ -1,3 +1,5 @@
 requests
 python-dotenv
 pandas
+streamlit>=1.35
+streamlit-shadcn-ui
