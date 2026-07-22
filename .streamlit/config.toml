@@ -4,6 +4,3 @@ backgroundColor = "#ffffff"
 secondaryBackgroundColor = "#f1f5f9"  # slate-100 cards
 textColor = "#0f172a"             # slate-900
 font = "sans serif"
-
-[server]
-enableStaticServing = true

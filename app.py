@@ -1,4 +1,6 @@
 """PharmSignal - FAERS disproportionality signal explorer."""
+import os
+
 import streamlit as st
 
 from faers import ApiUnavailable, DrugNotFound, detect_signals
@@ -8,6 +10,15 @@ try:  # optional polish component — never let it take the app down
     HAS_SHADCN = True
 except ImportError:
     HAS_SHADCN = False
+
+# On Streamlit Cloud the API key lives in st.secrets, but the engine reads
+# os.environ. Bridge it so deploying only requires pasting the key into Secrets;
+# locally (no secrets.toml) this is a no-op and the engine runs keyless.
+try:
+    if "OPENFDA_API_KEY" in st.secrets:
+        os.environ.setdefault("OPENFDA_API_KEY", st.secrets["OPENFDA_API_KEY"])
+except Exception:
+    pass
 
 st.set_page_config(page_title="PharmSignal", page_icon="💊", layout="centered")
 
@@ -42,7 +53,7 @@ def render_results(df, drug):
     display["signal"] = display["signal"].map({True: "🔴 signal", False: ""})
     display = display[["event", "a", "PRR (95% CI)", "ROR (95% CI)", "chi2", "signal"]]
     display["chi2"] = display["chi2"].round(2)
-    display = display.rename(columns={"event": "Adverse event (MedDRA PT)"})
+    display = display.rename(columns={"event": "Adverse event (MedDRA PT)", "a": "Reports (a)"})
 
     if HAS_SHADCN:  # nicer table; degrades to st.dataframe if the component failed to import
         ui.table(data=display)
