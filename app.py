@@ -47,6 +47,10 @@ def render_results(df, drug):
     else:
         st.dataframe(display, use_container_width=True, hide_index=True)
 
+    st.subheader("Top 10 by PRR")
+    top10 = df.head(10).set_index("event")["PRR"].sort_values()
+    st.bar_chart(top10, horizontal=True)
+
 
 drug = st.text_input("Drug name", placeholder="e.g. metformin").strip().lower()
 if drug:
