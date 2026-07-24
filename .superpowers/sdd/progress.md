@@ -28,3 +28,7 @@ Executing Tasks 0-4; STOP before Task 5 deploy (needs openFDA key in Streamlit s
 - Final whole-branch review: MERGEABLE. 2 Important addressed pre-merge (streamlit>=1.35 pin; st.secrets→env bridge). Minors: friendly 'a' label done; inf/empty-df latent (engine frozen), left.
 - Verified: app boots (health 200), live data-path check on atorvastatin (20 rows/4 signals, columns + finite PRR OK), 7/7 engine tests green.
 - REMAINING: FEL-32 deploy (needs openFDA key in Streamlit Cloud secrets) → then tag v1.0. Key: https://open.fda.gov/apis/authentication/
+
+## PERF (FEL-40 PS-22) — COMPLETE (merged to main)
+- Parallelized detect_signals per-event calls (ThreadPoolExecutor max_workers=8). Output provably identical (mock tests), 9/9 green. Review (opus): no concurrency bugs.
+- NOTE 2026-07-24: openFDA degraded (57s raw call). Parallel version reachable (aspirin top_n=6 ~16.6s today). <15s final verification + v1.0 tag deferred to FEL-32 deploy when API healthy.
